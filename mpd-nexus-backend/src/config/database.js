@@ -1,28 +1,35 @@
-const mongoose = require('mongoose');
+require('dotenv').config();
+
+const mysql = require('mysql2/promise');
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGODB_URI;
+    const connection = await pool.getConnection();
+    await connection.ping();
 
-    if (!mongoURI) {
-      throw new Error('MONGODB_URI não foi definida no arquivo .env');
-    }
+    console.log('✅ MySQL conectado com sucesso!');
+    console.log(`📊 Banco: ${process.env.DB_NAME}`);
 
-    const conn = await mongoose.connect(mongoURI, {
-      serverSelectionTimeoutMS: 5000,
-    });
-
-    console.log('✅ MongoDB conectado com sucesso!');
-    console.log(`📊 Host: ${conn.connection.host}`);
-    console.log(`📊 Database: ${conn.connection.name}`);
-
-    return conn;
+    connection.release();
   } catch (error) {
-    console.error('❌ Erro ao conectar ao MongoDB:');
+    console.error('❌ Erro ao conectar ao MySQL:');
     console.error(error.message);
-
     throw error;
   }
 };
 
-module.exports = connectDB;
+module.exports = {
+  pool,
+  connectDB
+};
