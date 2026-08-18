@@ -1,0 +1,9 @@
+SOURCE 01_config.sql;
+SOURCE 02_localizacao.sql;
+SOURCE 03_suporte.sql;
+SOURCE 04_usuarios_sessoes.sql;
+SOURCE 05_servicos_emergencias.sql;
+SOURCE 06_orcamentos_agendamentos.sql;
+SOURCE 07_financeiro_carteira.sql;
+SOURCE 08_comunicacao_notificacoes.sql;
+SOURCE 09_estoque_materiais.sql;
