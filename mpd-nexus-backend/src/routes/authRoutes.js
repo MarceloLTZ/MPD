@@ -1,19 +1,50 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe } = require('../controllers/authController');
+
+const {
+  register,
+  login,
+  getMe
+} = require('../controllers/authController');
+
 const { protect } = require('../middleware/auth');
 const { body } = require('express-validator');
 
 router.post('/register', [
-  body('name').notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('phone').notEmpty().withMessage('Phone is required')
+  body('name')
+    .notEmpty()
+    .withMessage('Name is required'),
+
+  body('email')
+    .isEmail()
+    .withMessage('Please provide a valid email'),
+
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters'),
+
+  body('phone')
+    .notEmpty()
+    .withMessage('Phone is required'),
+
+  body('cpf')
+    .notEmpty()
+    .withMessage('CPF or CNPJ is required'),
+
+  body('userType')
+    .optional()
+    .isIn(['client', 'professional'])
+    .withMessage('userType must be client or professional')
 ], register);
 
 router.post('/login', [
-  body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').notEmpty().withMessage('Password is required')
+  body('email')
+    .isEmail()
+    .withMessage('Please provide a valid email'),
+
+  body('password')
+    .notEmpty()
+    .withMessage('Password is required')
 ], login);
 
 router.get('/me', protect, getMe);

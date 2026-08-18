@@ -1,0 +1,401 @@
+===== CHAT CONTROLLER =====
+const Chat = require('../models/Chat');
+const Message = require('../models/Message');
+const Professional = require('../models/Professional');
+const User = require('../models/User');
+
+exports.getChats = async (req, res) => {
+  try {
+    const chats = await Chat.find({
+      'participants.userId': req.user.id,
+      isActive: true
+    })
+    .populate('participants.userId', 'name email profileImage')
+    .populate('professionalId', 'title specialty rating')
+    .populate('lastMessage')
+    .sort({ updatedAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: chats.length,
+      chats
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.getChatMessages = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const { page = 1, limit = 50 } = req.query;
+
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ message: 'Chat not found' });
+    }
+
+    const isParticipant = chat.participants.some(
+      p => p.userId.toString() === req.user.id
+    );
+    if (!isParticipant) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const messages = await Message.find({ chatId, isDeleted: false })
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .populate('sender.userId', 'name email profileImage');
+
+    await Message.updateMany(
+      {
+        chatId,
+        'sender.userId': { $ne: req.user.id },
+        isRead: false
+      },
+      { isRead: true, readAt: Date.now() }
+    );
+
+    res.status(200).json({
+      success: true,
+      messages: messages.reverse(),
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: await Message.countDocuments({ chatId, isDeleted: false })
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.sendMessage = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const { content, messageType, attachments } = req.body;
+
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ message: 'Chat not found' });
+    }
+
+    const participant = chat.participants.find(
+      p => p.userId.toString() === req.user.id
+    );
+    if (!participant) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const user = await User.findById(req.user.id);
+    const userType = user.isProfessional ? 'professional' : 'client';
+
+    const message = await Message.create({
+      chatId,
+      sender: {
+        userId: req.user.id,
+        userType
+      },
+      content,
+      messageType: messageType || 'text',
+      attachments: attachments || [],
+      status: 'sent'
+    });
+
+    chat.lastMessage = message._id;
+    chat.updatedAt = Date.now();
+    await chat.save();
+
+    await message.populate('sender.userId', 'name email profileImage');
+
+    res.status(201).json({
+      success: true,
+      message
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.createChat = async (req, res) => {
+  try {
+    const { professionalId } = req.body;
+
+    const professional = await Professional.findById(professionalId);
+    if (!professional) {
+      return res.status(404).json({ message: 'Professional not found' });
+    }
+
+    const existingChat = await Chat.findOne({
+      'participants.userId': req.user.id,
+      professionalId,
+      isActive: true
+    });
+
+    if (existingChat) {
+      return res.status(200).json({
+        success: true,
+        chat: existingChat
+      });
+    }
+
+    const chat = await Chat.create({
+      participants: [
+        {
+          userId: req.user.id,
+          userType: 'client'
+        },
+        {
+          userId: professional.userId,
+          userType: 'professional'
+        }
+      ],
+      professionalId
+    });
+
+    await chat.populate('participants.userId', 'name email profileImage');
+    await chat.populate('professionalId', 'title specialty');
+
+    res.status(201).json({
+      success: true,
+      chat
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+===== CHAT ROUTES =====
+const express = require('express');
+const router = express.Router();
+const {
+  getChats,
+  getChatMessages,
+  sendMessage,
+  createChat
+} = require('../controllers/chatController');
+const { protect } = require('../middleware/auth');
+
+router.get('/', protect, getChats);
+router.post('/', protect, createChat);
+router.get('/:chatId/messages', protect, getChatMessages);
+router.post('/:chatId/messages', protect, sendMessage);
+
+module.exports = router;
+
+===== PAYMENT CONTROLLER =====
+const Payment = require('../models/Payment');
+const Professional = require('../models/Professional');
+
+exports.createPayment = async (req, res) => {
+  try {
+    const {
+      professionalId,
+      amount,
+      paymentMethod,
+      serviceDetails,
+      currency
+    } = req.body;
+
+    const professional = await Professional.findById(professionalId);
+    if (!professional) {
+      return res.status(404).json({ message: 'Professional not found' });
+    }
+
+    const transactionId = `MPD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    const payment = await Payment.create({
+      userId: req.user.id,
+      professionalId,
+      amount,
+      currency: currency || 'BRL',
+      paymentMethod,
+      transactionId,
+      serviceDetails,
+      paymentStatus: 'pending'
+    });
+
+    res.status(201).json({
+      success: true,
+      payment,
+      paymentDetails: {
+        transactionId,
+        status: 'pending'
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.getUserPayments = async (req, res) => {
+  try {
+    const { status } = req.query;
+    let query = { userId: req.user.id };
+    if (status) query.paymentStatus = status;
+
+    const payments = await Payment.find(query)
+      .populate('professionalId', 'title specialty')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: payments.length,
+      payments
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+===== PAYMENT ROUTES =====
+const express = require('express');
+const router = express.Router();
+const {
+  createPayment,
+  getUserPayments
+} = require('../controllers/paymentController');
+const { protect } = require('../middleware/auth');
+
+router.post('/', protect, createPayment);
+router.get('/', protect, getUserPayments);
+
+module.exports = router;
+
+===== CONTACT CONTROLLER =====
+const Contact = require('../models/Contact');
+const Professional = require('../models/Professional');
+
+exports.getContacts = async (req, res) => {
+  try {
+    const contacts = await Contact.find({ userId: req.user.id, status: 'active' })
+      .populate('contactId', 'name email profileImage')
+      .populate('professionalId', 'title specialty rating')
+      .sort({ favorite: -1, lastInteraction: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: contacts.length,
+      contacts
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.addContact = async (req, res) => {
+  try {
+    const { professionalId } = req.body;
+    
+    const professional = await Professional.findById(professionalId);
+    if (!professional) {
+      return res.status(404).json({ message: 'Professional not found' });
+    }
+
+    const existingContact = await Contact.findOne({
+      userId: req.user.id,
+      professionalId
+    });
+
+    if (existingContact) {
+      return res.status(400).json({ message: 'Contact already exists' });
+    }
+
+    const contact = await Contact.create({
+      userId: req.user.id,
+      contactId: professional.userId,
+      professionalId,
+      type: 'professional'
+    });
+
+    res.status(201).json({
+      success: true,
+      contact
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.toggleFavorite = async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.id);
+    if (!contact) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    if (contact.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    contact.favorite = !contact.favorite;
+    await contact.save();
+
+    res.status(200).json({
+      success: true,
+      contact
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+===== CONTACT ROUTES =====
+const express = require('express');
+const router = express.Router();
+const {
+  getContacts,
+  addContact,
+  toggleFavorite
+} = require('../controllers/contactController');
+const { protect } = require('../middleware/auth');
+
+router.get('/', protect, getContacts);
+router.post('/', protect, addContact);
+router.put('/:id/favorite', protect, toggleFavorite);
+
+module.exports = router;
+
+===== APP =====
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const errorHandler = require('./middleware/errorHandler');
+
+dotenv.config();
+
+const authRoutes = require('./routes/authRoutes');
+const professionalRoutes = require('./routes/professionalRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const contactRoutes = require('./routes/contactRoutes');
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: '*', credentials: true }));
+
+app.use('/api/auth', authRoutes);
+app.use('/api/professionals', professionalRoutes);
+app.use('/api/chats', chatRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/contacts', contactRoutes);
+
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'MPD Nexus API is running' });
+});
+
+app.use(errorHandler);
+
+module.exports = app;
