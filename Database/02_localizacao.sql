@@ -6,7 +6,7 @@ CREATE TABLE Estado (
     Nome VARCHAR(50) NOT NULL,
     Sigla CHAR(2) NOT NULL UNIQUE,
     ddd INT
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
 
 CREATE TABLE Cidade (
     idCidade INT AUTO_INCREMENT PRIMARY KEY,
