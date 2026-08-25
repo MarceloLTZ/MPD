@@ -37,13 +37,13 @@ CREATE TABLE Profissional_Especialidades (
         Servico_idServico
     ),
 
-    CONSTRAINT fk_esp_servico
-        FOREIGN KEY (Servico_idServico)
+    CONSTRAINT fk_esp_profissional
+        FOREIGN KEY (Profissional_idProfissional)
         REFERENCES Profissional(idProfissional)
         ON DELETE CASCADE,
-    
+
     CONSTRAINT fk_esp_servico
         FOREIGN KEY (Servico_idServico)
         REFERENCES Servico(idServico)
         ON DELETE CASCADE
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
