@@ -1,18 +1,22 @@
-USE marido_de_alguel_master;
+USE marido_de_aluguel_master;
 
-CREATE TABLE Pagamento(
+-- ============================================================
+-- FINANCEIRO E CARTEIRA
+-- ============================================================
+
+CREATE TABLE Pagamento (
     idPagamento INT AUTO_INCREMENT PRIMARY KEY,
 
     ValorTotal DECIMAL(10,2) NOT NULL,
     TaxaPlataforma DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    ValorRepassePrestador DECIMAL (10,2) NOT NULL DEFAULT 0.00,
+    ValorRepassePrestador DECIMAL(10,2) NOT NULL DEFAULT 0.00,
 
     MetodoPagamento ENUM(
         'PIX',
         'Cartao_Credito',
-        'Cartao_Credito',
+        'Cartao_Debito',
         'Dinheiro'
-    )NOT NULL,
+    ) NOT NULL,
 
     DataPagamento DATETIME NOT NULL
         DEFAULT CURRENT_TIMESTAMP,
@@ -22,7 +26,7 @@ CREATE TABLE Pagamento(
         'Aprovado',
         'Recusado',
         'Estornado'
-    )DEFAULT 'Pendente',
+    ) DEFAULT 'Pendente',
 
     Agendamento_idAgendamento INT UNIQUE NOT NULL,
 
@@ -34,13 +38,13 @@ CREATE TABLE Pagamento(
 
     INDEX idx_pagamento_status (StatusPagamento),
     INDEX idx_pagamento_data (DataPagamento)
-) ENGINE= InnoDB;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE CarteiraPrestador (
     idCarteira INT AUTO_INCREMENT PRIMARY KEY,
 
-    Profisional_idProfissional INT UNIQUE NOT NULL,
+    Profissional_idProfissional INT UNIQUE NOT NULL,
 
     SaldoDisponivel DECIMAL(10,2) DEFAULT 0.00,
     SaldoBloqueado DECIMAL(10,2) DEFAULT 0.00,
@@ -54,14 +58,13 @@ CREATE TABLE CarteiraPrestador (
         FOREIGN KEY (Profissional_idProfissional)
         REFERENCES Profissional(idProfissional)
         ON DELETE CASCADE
-
 ) ENGINE=InnoDB;
 
 
 CREATE TABLE TransacaoCarteira (
     idTransacao INT AUTO_INCREMENT PRIMARY KEY,
 
-    Carteira_idCarteira INT NOT NUll,
+    Carteira_idCarteira INT NOT NULL,
 
     TipoTransacao ENUM(
         'Credito_Servico',
@@ -103,4 +106,4 @@ CREATE TABLE Desconto (
         REFERENCES Pagamento(idPagamento)
         ON DELETE CASCADE
         ON UPDATE CASCADE
-)ENGINE=InnoDB;
+) ENGINE=InnoDB;
