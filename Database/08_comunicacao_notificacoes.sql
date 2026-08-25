@@ -104,3 +104,37 @@ CREATE TABLE Notificacoes (
 
 )ENGINE=InnoDB;
 
+
+CREATE TABLE Contatos (
+    idContato INT AUTO_INCREMENT PRIMARY KEY,
+
+    Clientes_ID_Clientes INT NOT NULL,
+    Profissional_idProfissional INT NOT NULL,
+
+    Favorito BOOLEAN DEFAULT FALSE,
+
+    CriadoEm DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_contato_cliente
+        FOREIGN KEY (Clientes_ID_Clientes)
+        REFERENCES Clientes(ID_Clientes)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_contato_profissional
+        FOREIGN KEY (Profissional_idProfissional)
+        REFERENCES Profissional(idProfissional)
+        ON DELETE CASCADE,
+
+    UNIQUE KEY uq_contato_cliente_profissional (
+        Clientes_ID_Clientes,
+        Profissional_idProfissional
+    ),
+
+    INDEX idx_contato_cliente (
+        Clientes_ID_Clientes
+    ),
+
+    INDEX idx_contato_profissional (
+        Profissional_idProfissional
+    )
+) ENGINE=InnoDB;
