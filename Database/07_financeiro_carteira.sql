@@ -28,7 +28,7 @@ CREATE TABLE Pagamento(
 
     CONSTRAINT fk_pagamento_agendamento
         FOREIGN KEY (Agendamento_idAgendamento)
-        REFERENCES Agendamentos(idAgendamento)
+        REFERENCES Agendamento(idAgendamento)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
 
