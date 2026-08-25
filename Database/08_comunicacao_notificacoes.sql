@@ -1,5 +1,8 @@
 USE marido_de_aluguel_master;
 
+-- ============================================================
+-- AVALIAÇÕES, CHATS E NOTIFICAÇÕES
+-- ============================================================
 
 CREATE TABLE Avaliacao (
     idAvaliacao INT AUTO_INCREMENT PRIMARY KEY,
@@ -8,15 +11,15 @@ CREATE TABLE Avaliacao (
     Comentario TEXT,
 
     DataAvaliacao DATETIME NOT NULL
-        DEFAULT CURRENT_TIME,
-    
+        DEFAULT CURRENT_TIMESTAMP,
+
     Agendamento_idAgendamento INT UNIQUE NOT NULL,
 
     CONSTRAINT fk_avaliacao_agendamento
         FOREIGN KEY (Agendamento_idAgendamento)
         REFERENCES Agendamento(idAgendamento)
         ON DELETE CASCADE
-) ENGINE = InnoDB;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE Chat (
@@ -32,25 +35,26 @@ CREATE TABLE Chat (
     Mensagem TEXT NOT NULL,
 
     DataEnvio DATETIME NOT NULL
-        DEFAULT CURRENT_TIME,
+        DEFAULT CURRENT_TIMESTAMP,
 
     Lido BOOLEAN DEFAULT FALSE,
 
     CONSTRAINT fk_chat_agendamento
         FOREIGN KEY (Agendamento_idAgendamento)
         REFERENCES Agendamento(idAgendamento)
-        OND DELETE CASCADE,
+        ON DELETE CASCADE,
 
     INDEX idx_chat_agendamento (
         Agendamento_idAgendamento
     )
-) ENGINE = InnoDB;
+) ENGINE=InnoDB;
+
 
 CREATE TABLE Chat_Suporte (
     idChatSuporte INT AUTO_INCREMENT PRIMARY KEY,
 
     Suporte_idSuporte INT NOT NULL,
-    Cliente_ID_Cliente INT NOT NULL,
+    Clientes_ID_Clientes INT NOT NULL,
 
     Mensagem TEXT NOT NULL,
 
@@ -69,9 +73,9 @@ CREATE TABLE Chat_Suporte (
 
     INDEX idx_chatsuporte_cliente (
         Clientes_ID_Clientes
-
     )
-)ENGINE=InnoDB;
+) ENGINE=InnoDB;
+
 
 CREATE TABLE Notificacoes (
     idNotificacao INT AUTO_INCREMENT PRIMARY KEY,
@@ -81,7 +85,7 @@ CREATE TABLE Notificacoes (
         'Profissional'
     ) NOT NULL,
 
-    UsuarioID INT NULL,
+    UsuarioID INT NOT NULL,
 
     Titulo VARCHAR(100) NOT NULL,
     Mensagem TEXT NOT NULL,
@@ -95,46 +99,5 @@ CREATE TABLE Notificacoes (
         UsuarioTipo
     ),
 
-    INDEX idx_notificacoes_usuario (
-        UsuarioID,
-        UsuarioTipo
-    ),
-
     INDEX idx_notificacoes_lida (Lida)
-
-)ENGINE=InnoDB;
-
-
-CREATE TABLE Contatos (
-    idContato INT AUTO_INCREMENT PRIMARY KEY,
-
-    Clientes_ID_Clientes INT NOT NULL,
-    Profissional_idProfissional INT NOT NULL,
-
-    Favorito BOOLEAN DEFAULT FALSE,
-
-    CriadoEm DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_contato_cliente
-        FOREIGN KEY (Clientes_ID_Clientes)
-        REFERENCES Clientes(ID_Clientes)
-        ON DELETE CASCADE,
-
-    CONSTRAINT fk_contato_profissional
-        FOREIGN KEY (Profissional_idProfissional)
-        REFERENCES Profissional(idProfissional)
-        ON DELETE CASCADE,
-
-    UNIQUE KEY uq_contato_cliente_profissional (
-        Clientes_ID_Clientes,
-        Profissional_idProfissional
-    ),
-
-    INDEX idx_contato_cliente (
-        Clientes_ID_Clientes
-    ),
-
-    INDEX idx_contato_profissional (
-        Profissional_idProfissional
-    )
 ) ENGINE=InnoDB;
