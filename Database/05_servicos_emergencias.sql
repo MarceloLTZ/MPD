@@ -1,4 +1,8 @@
-USE marido_aluguel_master;
+USE marido_de_aluguel_master;
+
+-- ============================================================
+-- SERVIÇOS E ESPECIALIDADES
+-- ============================================================
 
 CREATE TABLE emergencias (
     idemergencias INT AUTO_INCREMENT PRIMARY KEY,
@@ -6,10 +10,12 @@ CREATE TABLE emergencias (
     Nivel VARCHAR(30) NOT NULL,
     Descricao TEXT,
     Ativo BOOLEAN DEFAULT TRUE
-) ENGINE = InnoDBB;
+) ENGINE=InnoDB;
+
 
 CREATE TABLE Servico (
     idServico INT AUTO_INCREMENT PRIMARY KEY,
+
     NomeServico VARCHAR(100) NOT NULL,
     Descricao TEXT,
     PrecoBase DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -20,13 +26,15 @@ CREATE TABLE Servico (
     CriadoEm DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_servico_emergencias
-    FOREIGN KEY (emergencias_idemergencias)
-    REFERENCES emergencias(idemergencias)
-    ON DELETE SET NULLON UPDATE CASCADE,
+        FOREIGN KEY (emergencias_idemergencias)
+        REFERENCES emergencias(idemergencias)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
 
     INDEX idx_servico_nome (NomeServico),
     INDEX idx_servico_ativo (Ativo)
 ) ENGINE=InnoDB;
+
 
 CREATE TABLE Profissional_Especialidades (
     Profissional_idProfissional INT NOT NULL,
