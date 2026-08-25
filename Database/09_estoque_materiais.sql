@@ -1,5 +1,8 @@
 USE marido_de_aluguel_master;
 
+-- ============================================================
+-- GESTÃO DE ESTOQUE E MATERIAIS
+-- ============================================================
 
 CREATE TABLE CategoriaProduto (
     idCategoria INT AUTO_INCREMENT PRIMARY KEY,
