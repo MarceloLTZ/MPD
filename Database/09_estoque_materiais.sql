@@ -1,4 +1,4 @@
-USE marido_de_alguel_master;
+USE marido_de_aluguel_master;
 
 
 CREATE TABLE CategoriaProduto (
