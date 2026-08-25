@@ -1,6 +1,6 @@
 USE   marido_de_aluguel_master;
 
-
+ 
 CREATE TABLE Estado (
     idEstado INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(50) NOT NULL,
