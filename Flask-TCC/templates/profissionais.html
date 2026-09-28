@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}Profissionais — MPD Nexus{% endblock %}
-{% block content %}
-<section class="browse-head"><div class="wrap"><p class="eyebrow">Busca</p><h1>Encontre o profissional certo</h1><p>Filtre por especialidade ou cidade e compare os perfis cadastrados.</p>
-<form class="filters" method="get"><div class="filter-field"><i class="bi bi-search"></i><input name="q" value="{{ request.args.get('q','') }}" placeholder="Nome ou especialidade"></div><div class="filter-field"><i class="bi bi-tools"></i><input name="especialidade" value="{{ request.args.get('especialidade','') }}" placeholder="Especialidade"></div><div class="filter-field"><i class="bi bi-geo-alt"></i><input name="cidade" value="{{ request.args.get('cidade','') }}" placeholder="Cidade"></div><button class="btn btn-primary">Buscar</button></form>
-<div class="filter-chips">{% for s in servicos %}<a class="chip {% if request.args.get('especialidade') == s.nome %}active{% endif %}" href="{{ url_for('profissionais', especialidade=s.nome) }}">{{ s.nome }}</a>{% endfor %}<a class="chip" href="{{ url_for('profissionais') }}">Limpar filtros</a></div>
-</div></section>
-<section class="section-block wrap"><div class="browse-toolbar"><span>{{ profissionais|length }} profissional(is) encontrado(s)</span><a class="text-link" href="{{ url_for('mapa') }}"><i class="bi bi-map"></i> Ver no mapa</a></div><div class="professional-grid browse-grid">{% for p in profissionais %}{% include '_professional_card.html' %}{% else %}<div class="empty-state"><i class="bi bi-search"></i><h3>Nenhum profissional encontrado</h3><p>Tente outra especialidade, nome ou cidade.</p></div>{% endfor %}</div></section>
-{% endblock %}
