@@ -1,0 +1,10 @@
+<article class="professional-card">
+  <div class="professional-top">
+    <span class="avatar">{{ p.nome[0]|upper }}</span>
+    <div><h3>{{ p.nome }}</h3><p>{{ p.especialidade }}</p></div>
+  </div>
+  <div class="rating-line"><span class="stars"><i class="bi bi-star-fill"></i></span><b>{{ p.nota }}</b><span>• {{ p.cidade }}</span></div>
+  <p class="professional-description">{{ p.bio or 'Profissional disponível para atendimentos residenciais.' }}</p>
+  <span class="verified-tag"><i class="bi bi-patch-check"></i> Perfil cadastrado</span>
+  <div class="professional-footer"><span class="price-label"><b>Orçamento</b><small>a combinar</small></span><a class="btn btn-primary btn-sm" href="{{ url_for('profissional', profissional_id=p.id) }}">Ver perfil</a></div>
+</article>

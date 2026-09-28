@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{const btn=document.getElementById('mobileMenuBtn');const nav=document.getElementById('mobileNav');if(btn&&nav){btn.addEventListener('click',()=>nav.classList.toggle('open'));}setTimeout(()=>{document.querySelectorAll('.flash').forEach(f=>f.remove())},5000);});

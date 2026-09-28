@@ -1,0 +1,27 @@
+MPD NEXUS - SUBIR VERSAO FLASK
+
+Branch sugerida: tcc-flask-index-style
+
+Se for subir pelo terminal depois de clonar o repositório:
+
+1) Entre na pasta do repositório MPD.
+2) Crie a branch:
+   git checkout -b tcc-flask-index-style
+
+3) Copie TODO o conteúdo desta pasta para a raiz do repositório.
+
+4) Confira:
+   git status
+
+5) Adicione:
+   git add .
+
+6) Commit:
+   git commit -m "Add Flask TCC version inspired by index prototype"
+
+7) Envie a branch:
+   git push -u origin tcc-flask-index-style
+
+IMPORTANTE:
+- Não envie o arquivo .env com sua senha do MySQL.
+- O .gitignore já ignora .env, .venv e __pycache__.
