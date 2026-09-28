@@ -3,7 +3,7 @@ session_start();
 
 $servidor = "localhost";
 $usuario = "root";
-$senha = "123";
+$senha = "1234";
 $banco = "mpd_nexus";
 
 $conexao = new mysqli($servidor, $usuario, $senha, $banco);
