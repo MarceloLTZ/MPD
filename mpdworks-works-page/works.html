@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDWorks — Sua casa sempre segura e funcionando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0c0e;
+  --bg-soft:#131317;
+  --elev:#18181d;
+  --elev-2:#202027;
+  --border:#2a2a32;
+  --border-soft:#232329;
+  --text:#f3f3f1;
+  --text-dim:#a6a6b0;
+  --text-faint:#6f6f7a;
+  --accent:#f0701c;
+  --accent-hi:#ff8a3f;
+  --accent-ink:#2a1204;
+  --star:#f2b90c;
+  --ok:#33c481;
+  --radius-s:8px;
+  --radius-m:14px;
+  --radius-l:22px;
+  --shadow:0 20px 50px -20px rgba(0,0,0,.6);
+  --maxw:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none !important; animation:none !important} }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Inter",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.brand{font-family:"Sora",system-ui,sans-serif}
+a{color:inherit}
+img,svg{display:block}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent-hi); outline-offset:2px}
+.icon{width:1em;height:1em}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.hidden{display:none !important}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:999px;font-weight:600;font-size:14.5px;
+  padding:13px 24px;border:1px solid transparent;cursor:pointer;
+  transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#181008}
+.btn-primary:hover{background:var(--accent-hi)}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--border);}
+.btn-outline:hover{border-color:var(--accent)}
+.btn-dark{background:#000;color:#fff;border-color:#000}
+.btn-dark:hover{background:#1a1a1a}
+.btn-ghost{background:transparent;color:var(--text-dim);padding:10px 14px}
+.btn-ghost:hover{color:var(--text)}
+.btn-sm{padding:9px 16px;font-size:13px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* ---------- Header ---------- */
+header.site{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,12,14,.86);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border-soft);
+}
+.header-inner{display:flex;align-items:center;gap:24px;padding:14px 24px;max-width:var(--maxw);margin:0 auto}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.02em;cursor:pointer;flex-shrink:0}
+.brand-mark{width:30px;height:30px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#181008}
+.brand span.hi{color:var(--accent)}
+.searchbar{
+  flex:1;max-width:420px;display:flex;align-items:center;gap:9px;
+  background:var(--elev-2);border:1px solid var(--border);border-radius:999px;
+  padding:9px 16px;color:var(--text-faint);
+}
+.searchbar input{background:none;border:none;outline:none;color:var(--text);width:100%;font-size:14px}
+.searchbar input::placeholder{color:var(--text-faint)}
+.searchbar svg{flex-shrink:0;color:var(--text-faint)}
+nav.main-nav{display:flex;align-items:center;gap:22px;margin-left:auto;font-size:14px;color:var(--text-dim)}
+nav.main-nav a{cursor:pointer;white-space:nowrap}
+nav.main-nav a:hover{color:var(--text)}
+.header-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.user-chip{display:flex;align-items:center;gap:9px;background:var(--elev-2);border:1px solid var(--border);border-radius:999px;padding:6px 14px 6px 6px;cursor:pointer;font-size:13.5px}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.avatar.lg{width:56px;height:56px;font-size:20px}
+.user-chip .u-name{line-height:1.1}
+.user-chip .u-role{display:block;font-size:11px;color:var(--text-faint)}
+.user-menu{position:relative}
+.dropdown{
+  position:absolute;right:0;top:calc(100% + 10px);background:var(--elev);border:1px solid var(--border);
+  border-radius:var(--radius-m);min-width:190px;padding:8px;box-shadow:var(--shadow);display:none;z-index:60;
+}
+.dropdown.open{display:block}
+.dropdown a{display:block;padding:10px 12px;border-radius:8px;font-size:13.5px;color:var(--text-dim);cursor:pointer}
+.dropdown a:hover{background:var(--elev-2);color:var(--text)}
+@media(max-width:920px){ .searchbar,nav.main-nav{display:none} }
+
+/* ---------- Views ---------- */
+.view{display:none}
+.view.active{display:block}
+section{padding:74px 0}
+.section-tight{padding:48px 0}
+.eyebrow{color:var(--accent);font-size:13px;font-weight:700;margin:0 0 10px}
+h1.hero-title{font-size:44px;line-height:1.08;letter-spacing:-.02em;margin:0 0 18px;font-weight:700}
+.section-head{max-width:560px;margin:0 0 34px}
+.section-head h2{font-size:30px;line-height:1.2;margin:0 0 10px;font-weight:700;letter-spacing:-.01em}
+.section-head p{color:var(--text-dim);margin:0;font-size:15.5px;line-height:1.6}
+
+/* ---------- Hero ---------- */
+.hero{padding-top:56px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:52px;align-items:center}
+.hero-copy p.lead{color:var(--text-dim);font-size:16.5px;line-height:1.65;max-width:460px;margin:0 0 30px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.hero-art{position:relative}
+.hero-art .frame{
+  border-radius:var(--radius-l);overflow:hidden;aspect-ratio:1/0.82;
+  background:
+    radial-gradient(120% 140% at 15% 10%, #3a281c 0%, transparent 55%),
+    linear-gradient(155deg,#2b2620 0%, #17140f 55%, #0f0d0a 100%);
+  border:1px solid var(--border-soft);position:relative;
+}
+.hero-art svg.illust{width:78%;position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);color:var(--accent)}
+.badge-float{
+  position:absolute;left:22px;bottom:22px;background:rgba(12,12,14,.85);backdrop-filter:blur(6px);
+  border:1px solid var(--border);border-radius:999px;padding:9px 16px 9px 9px;display:flex;align-items:center;gap:10px;font-size:12.5px;
+}
+.badge-float .dot-ico{width:26px;height:26px;border-radius:50%;background:var(--ok);display:flex;align-items:center;justify-content:center;color:#06251a}
+.badge-float b{display:block;font-size:13px}
+.badge-float span{color:var(--text-faint);font-size:11px}
+@media(max-width:900px){ .hero-grid{grid-template-columns:1fr} h1.hero-title{font-size:33px} }
+
+/* ---------- Category grid ---------- */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cat-card{
+  background:var(--elev);border:1px solid var(--border-soft);border-radius:var(--radius-m);
+  padding:20px;cursor:pointer;transition:border-color .15s ease, background .15s ease;
+}
+.cat-card:hover{border-color:var(--accent);background:var(--elev-2)}
+.cat-ico{width:40px;height:40px;border-radius:10px;background:rgba(240,112,28,.14);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.cat-card h4{margin:0 0 4px;font-size:15px;font-weight:600}
+.cat-card span{color:var(--text-faint);font-size:12.5px}
+@media(max-width:900px){ .cat-grid{grid-template-columns:repeat(2,1fr)} }
+
+/* ---------- Stats ---------- */
+.stats{border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);padding:40px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.stats-grid div + div{border-left:1px solid var(--border-soft)}
+.stats-grid b{display:block;font-size:32px;color:var(--accent);font-family:"Sora";font-weight:700}
+.stats-grid span{color:var(--text-dim);font-size:13px}
+@media(max-width:700px){ .stats-grid{grid-template-columns:1fr;gap:22px} .stats-grid div + div{border-left:none;border-top:1px solid var(--border-soft);padding-top:22px} }
+
+/* ---------- Professional cards ---------- */
+.pro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.pro-card{background:var(--elev);border:1px solid var(--border-soft);border-radius:var(--radius-m);padding:20px;display:flex;flex-direction:column;gap:12px}
+.pro-top{display:flex;align-items:center;gap:12px}
+.pro-top .meta b{display:block;font-size:14.5px}
+.pro-top .meta span{color:var(--text-faint);font-size:12.5px}
+.rating-row{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-dim)}
+.rating-row svg{color:var(--star)}
+.pro-desc{color:var(--text-dim);font-size:12.8px;line-height:1.55;flex:1}
+.tag{display:inline-flex;align-items:center;gap:5px;background:rgba(51,196,129,.12);color:var(--ok);font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;width:fit-content}
+.pro-foot{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.pro-price{font-weight:700;font-size:15px}
+.pro-price span{font-weight:400;color:var(--text-faint);font-size:11.5px}
+@media(max-width:980px){ .pro-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:560px){ .pro-grid{grid-template-columns:1fr} }
+
+/* ---------- How it works ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.step{position:relative;padding-top:6px}
+.step .num{font-family:"Sora";font-weight:800;font-size:34px;color:var(--accent);opacity:.5;margin:0 0 10px}
+.step h4{margin:0 0 8px;font-size:16px}
+.step p{margin:0;color:var(--text-dim);font-size:13.5px;line-height:1.6}
+@media(max-width:800px){ .steps{grid-template-columns:1fr} }
+
+/* ---------- Promo ---------- */
+.promo{
+  background:linear-gradient(120deg,#f0701c,#c9540f);border-radius:var(--radius-l);
+  padding:44px 46px;display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap;color:#1c0d02;
+}
+.promo h3{margin:0 0 6px;font-size:23px}
+.promo p{margin:0;color:#3a1c05;font-size:14px;max-width:420px}
+.promo-form{display:flex;gap:10px;flex-wrap:wrap}
+.promo-form input{border:none;border-radius:999px;padding:13px 18px;font-size:14px;width:230px;background:rgba(0,0,0,.15);color:#1c0d02}
+.promo-form input::placeholder{color:rgba(28,13,2,.6)}
+.promo-form .btn-dark{border-radius:999px}
+
+/* ---------- Testimonials ---------- */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.testi{background:var(--elev);border:1px solid var(--border-soft);border-radius:var(--radius-m);padding:22px}
+.testi .rating-row{margin-bottom:12px}
+.testi p{color:var(--text-dim);font-size:13.8px;line-height:1.6;margin:0 0 16px}
+.testi-who{display:flex;align-items:center;gap:10px}
+.testi-who b{font-size:13.5px;display:block}
+.testi-who span{font-size:11.5px;color:var(--text-faint)}
+@media(max-width:900px){ .testi-grid{grid-template-columns:1fr} }
+
+/* ---------- Footer ---------- */
+footer.site{background:#000;border-top:1px solid var(--border-soft);padding:56px 0 26px;margin-top:20px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+.foot-brand p{color:var(--text-faint);font-size:13px;line-height:1.7;max-width:280px;margin:14px 0 18px}
+.social{display:flex;gap:10px}
+.social a{width:34px;height:34px;border-radius:50%;background:var(--elev-2);display:flex;align-items:center;justify-content:center;color:var(--text-dim)}
+.foot-col h5{font-size:12px;letter-spacing:.04em;color:var(--text-faint);margin:0 0 14px;font-weight:600}
+.foot-col a{display:block;color:var(--text-dim);font-size:13.5px;margin-bottom:10px;cursor:pointer}
+.foot-col a:hover{color:var(--text)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:40px;padding-top:22px;border-top:1px solid var(--border-soft);color:var(--text-faint);font-size:12px}
+.foot-bottom a{cursor:pointer}
+@media(max-width:900px){ .foot-grid{grid-template-columns:1fr 1fr} }
+
+/* ---------- Browse view ---------- */
+.browse-head{padding:44px 0 24px;border-bottom:1px solid var(--border-soft)}
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:20px}
+.chip{padding:9px 16px;border-radius:999px;border:1px solid var(--border);background:var(--elev);font-size:13px;color:var(--text-dim);cursor:pointer}
+.chip.active{background:var(--accent);color:#181008;border-color:var(--accent);font-weight:600}
+.browse-toolbar{display:flex;justify-content:space-between;align-items:center;margin:26px 0 20px;flex-wrap:wrap;gap:12px}
+.browse-toolbar select{background:var(--elev);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-size:13px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-dim)}
+.empty-state svg{margin:0 auto 14px;color:var(--text-faint)}
+
+/* ---------- Auth view ---------- */
+.auth-shell{
+  min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;position:relative;padding:50px 20px;
+  background:
+    linear-gradient(rgba(6,6,7,.72),rgba(6,6,7,.85)),
+    radial-gradient(90% 90% at 20% 20%, #34291d 0%, transparent 55%),
+    radial-gradient(80% 80% at 85% 80%, #24201b 0%, transparent 55%),
+    #0c0c0e;
+}
+.auth-card{width:100%;max-width:420px;background:rgba(19,19,23,.92);border:1px solid var(--border-soft);border-radius:var(--radius-l);padding:34px 32px;box-shadow:var(--shadow)}
+.auth-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.auth-head h3{margin:0;font-size:21px}
+.role-toggle{display:flex;background:var(--elev-2);border-radius:999px;padding:3px;font-size:12px}
+.role-toggle button{border:none;background:none;color:var(--text-dim);padding:6px 13px;border-radius:999px;cursor:pointer;font-weight:600}
+.role-toggle button.active{background:var(--accent);color:#181008}
+.tab-switch{display:flex;gap:6px;margin-bottom:24px;background:var(--elev-2);padding:4px;border-radius:10px}
+.tab-switch button{flex:1;border:none;background:none;padding:10px;border-radius:7px;color:var(--text-dim);font-weight:600;font-size:13.5px;cursor:pointer}
+.tab-switch button.active{background:var(--elev);color:var(--text)}
+.field{margin-bottom:15px}
+.field label{display:block;font-size:12.5px;color:var(--text-dim);margin-bottom:6px}
+.field .req{color:var(--accent)}
+.field input{
+  width:100%;background:var(--elev-2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;
+  color:var(--text);font-size:14px;outline:none;
+}
+.field input:focus{border-color:var(--accent)}
+.field-row{display:flex;gap:10px}
+.field-err{color:#ff6868;font-size:11.5px;margin-top:5px;display:none}
+.field.err input{border-color:#ff6868}
+.field.err .field-err{display:block}
+.check-row{display:flex;align-items:flex-start;gap:9px;margin:16px 0 20px;font-size:12px;color:var(--text-dim);line-height:1.5}
+.check-row input{margin-top:3px}
+.auth-link{color:var(--accent);cursor:pointer;font-weight:600}
+.auth-foot-link{text-align:center;font-size:13px;color:var(--text-dim);margin-top:18px}
+.small-link{font-size:12px;color:var(--accent);cursor:pointer;display:inline-block;margin-top:-6px;margin-bottom:14px}
+
+/* ---------- Chat view ---------- */
+.chat-shell{height:calc(100vh - 68px);display:flex;border-top:1px solid var(--border-soft)}
+.chat-list{width:300px;border-right:1px solid var(--border-soft);display:flex;flex-direction:column;flex-shrink:0}
+.chat-list-search{padding:14px;border-bottom:1px solid var(--border-soft)}
+.chat-list-search .searchbar{max-width:none}
+.chat-list-items{overflow-y:auto;flex:1}
+.chat-item{display:flex;gap:11px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border-soft);position:relative}
+.chat-item:hover{background:var(--elev)}
+.chat-item.active{background:var(--elev-2)}
+.chat-item .avatar{position:relative;flex-shrink:0}
+.status-dot{position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-radius:50%;border:2px solid var(--bg)}
+.status-dot.online{background:var(--ok)}
+.status-dot.pending{background:var(--accent)}
+.chat-item .ci-meta{min-width:0;flex:1}
+.chat-item .ci-top{display:flex;justify-content:space-between;gap:6px}
+.chat-item b{font-size:13.5px}
+.chat-item time{font-size:10.5px;color:var(--text-faint);flex-shrink:0}
+.chat-item p{margin:3px 0 0;font-size:12px;color:var(--text-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.chat-head{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border-soft)}
+.chat-head .who b{display:block;font-size:14.5px}
+.chat-head .who span{font-size:12px;color:var(--ok)}
+.chat-head-actions{margin-left:auto;display:flex;gap:8px}
+.chat-body{flex:1;overflow-y:auto;padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.day-sep{text-align:center;color:var(--text-faint);font-size:11px;margin:6px 0}
+.bubble{max-width:62%;padding:11px 15px;border-radius:14px;font-size:13.6px;line-height:1.5;position:relative}
+.bubble.in{background:var(--elev);border:1px solid var(--border-soft);align-self:flex-start;border-bottom-left-radius:4px}
+.bubble.out{background:var(--accent);color:#1c0d02;align-self:flex-end;border-bottom-right-radius:4px}
+.bubble time{display:block;font-size:10px;margin-top:5px;opacity:.65;text-align:right}
+.chat-empty{margin:auto;text-align:center;color:var(--text-faint);font-size:13.5px}
+.chat-input{display:flex;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid var(--border-soft)}
+.chat-input button.icon-btn{background:none;border:none;color:var(--text-faint);cursor:pointer;padding:6px}
+.chat-input button.icon-btn:hover{color:var(--text)}
+.chat-input input{flex:1;background:var(--elev-2);border:1px solid var(--border);border-radius:999px;padding:11px 16px;color:var(--text);outline:none;font-size:13.8px}
+.chat-input input:focus{border-color:var(--accent)}
+.send-btn{background:var(--accent);color:#181008;border:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.send-btn:hover{background:var(--accent-hi)}
+@media(max-width:820px){ .chat-list{width:100%} .chat-main{display:none} .chat-shell.show-thread .chat-list{display:none} .chat-shell.show-thread .chat-main{display:flex} .back-btn{display:inline-flex !important} }
+.back-btn{display:none;background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px}
+
+/* ---------- Modal ---------- */
+.modal-backdrop{position:fixed;inset:0;background:rgba(3,3,4,.72);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-card{background:var(--elev);border:1px solid var(--border-soft);border-radius:var(--radius-l);padding:30px 28px;width:100%;max-width:360px;box-shadow:var(--shadow);text-align:center}
+.modal-card .avatar{margin:0 auto 14px}
+.modal-card h3{margin:0 0 4px;font-size:18px}
+.modal-card .sub{color:var(--text-faint);font-size:12.5px;margin-bottom:6px}
+.modal-card p.q{color:var(--text-dim);font-size:14px;margin:16px 0 14px}
+.star-row{display:flex;justify-content:center;gap:8px;margin-bottom:18px}
+.star-row button{background:none;border:none;cursor:pointer;color:var(--border);padding:0}
+.star-row button.on{color:var(--star)}
+.star-row svg{width:28px;height:28px}
+.modal-card textarea{
+  width:100%;min-height:70px;background:var(--elev-2);border:1px solid var(--border);border-radius:10px;
+  color:var(--text);padding:11px 13px;font-size:13px;font-family:inherit;resize:vertical;outline:none;margin-bottom:16px;
+}
+.modal-card textarea:focus{border-color:var(--accent)}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text-faint);cursor:pointer}
+.modal-card{position:relative}
+.skip-link{display:block;margin-top:12px;color:var(--text-faint);font-size:12.5px;cursor:pointer}
+
+/* ---------- Toast ---------- */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:200;display:flex;flex-direction:column;gap:10px}
+.toast{
+  background:var(--elev);border:1px solid var(--border-soft);border-left:3px solid var(--ok);color:var(--text);
+  padding:13px 18px;border-radius:10px;font-size:13.5px;box-shadow:var(--shadow);max-width:300px;
+  animation:toast-in .25s ease;
+}
+.toast.err{border-left-color:#ff6868}
+@keyframes toast-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){ #toast-container{left:16px;right:16px} .toast{max-width:none} }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="header-inner">
+    <div class="brand" data-nav="home">
+      <span class="brand-mark">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+      </span>
+      PD<span class="hi">Works</span>
+    </div>
+    <div class="searchbar">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="header-search" type="text" placeholder="Buscar serviço, profissional, produto...">
+    </div>
+    <nav class="main-nav">
+      <a data-nav="home" data-scroll="como-funciona">Como Funciona</a>
+      <a data-nav="auth" data-role="afiliado">Seja um Profissional</a>
+      <a data-action="support">Suporte</a>
+    </nav>
+    <div class="header-actions">
+      <div id="guest-actions">
+        <button class="btn btn-outline btn-sm" data-nav="auth" data-mode="login">Entrar</button>
+      </div>
+      <div id="user-menu" class="user-menu hidden">
+        <div class="user-chip" id="user-chip-btn">
+          <span class="avatar" id="user-avatar">?</span>
+          <span>
+            <span class="u-name" id="user-name">—</span>
+            <span class="u-role" id="user-role">Cliente</span>
+          </span>
+        </div>
+        <div class="dropdown" id="user-dropdown">
+          <a data-nav="chat">Meus Chats</a>
+          <a data-nav="browse">Encontrar Profissional</a>
+          <a id="logout-btn">Sair</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="app-main">
+
+  <!-- ======================= HOME ======================= -->
+  <section id="view-home" class="view active">
+
+    <div class="wrap hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">✦ Pluralidade de especialistas verificados</p>
+          <h1 class="hero-title">Sua casa sempre segura e funcionando</h1>
+          <p class="lead">Conecte-se com os melhores profissionais de manutenção, reparos e instalações residenciais em minutos. Serviço garantido com pagamento 100% seguro.</p>
+          <div class="hero-ctas">
+            <button class="btn btn-primary" data-nav="browse">Encontrar Profissional</button>
+            <button class="btn btn-outline" data-scroll="como-funciona" data-nav="home">Como funciona</button>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="frame">
+            <svg class="illust" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 90 100 30l80 60" opacity=".9"/>
+              <path d="M35 82v58a4 4 0 0 0 4 4h30v-46h30v46h30a4 4 0 0 0 4-4V82"/>
+              <circle cx="150" cy="42" r="16" opacity=".55"/>
+              <path d="M144 42h12M150 36v12" opacity=".55"/>
+            </svg>
+          </div>
+          <div class="badge-float">
+            <span class="dot-ico">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <span><b>Garantia PDWorks</b><span>Todo serviço é protegido</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap section-tight">
+      <div class="section-head">
+        <p class="eyebrow">Categorias principais</p>
+        <h2>O que você precisa hoje?</h2>
+      </div>
+      <div class="cat-grid" id="category-grid"></div>
+    </div>
+
+    <div class="stats">
+      <div class="wrap stats-grid">
+        <div><b>+15.000</b><span>Serviços concluídos com sucesso</span></div>
+        <div><b>4.9/5 ★</b><span>Média de avaliação dos clientes</span></div>
+        <div><b>100%</b><span>Profissionais com antecedentes verificados</span></div>
+      </div>
+    </div>
+
+    <div class="wrap section-tight">
+      <div class="section-head">
+        <p class="eyebrow">Destaques da semana</p>
+        <h2>Profissionais mais bem avaliados na sua região</h2>
+      </div>
+      <div class="pro-grid" id="featured-grid"></div>
+    </div>
+
+    <div class="wrap section-tight" id="como-funciona">
+      <div class="section-head" style="max-width:640px">
+        <p class="eyebrow">Como funciona a sua casa sempre</p>
+        <h2>Do problema à solução, em 3 passos</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><p class="num">1</p><h4>Escolha a especialidade</h4><p>Navegue pelas categorias ou busque pelo serviço que você precisa e compare profissionais da sua região.</p></div>
+        <div class="step"><p class="num">2</p><h4>Contrate com segurança</h4><p>Converse pelo chat, combine detalhes e valores, e pague com proteção garantida até o serviço ser concluído.</p></div>
+        <div class="step"><p class="num">3</p><h4>Avalie e relaxe</h4><p>Depois do serviço pronto, avalie o profissional e ajude a manter a qualidade de toda a comunidade.</p></div>
+      </div>
+    </div>
+
+    <div class="wrap section-tight">
+      <div class="promo">
+        <div>
+          <h3>Primeira vez por aqui? Ganhe 15% de desconto</h3>
+          <p>Cadastre seu e-mail e receba um cupom para usar na sua primeira contratação de qualquer profissional.</p>
+        </div>
+        <form class="promo-form" id="promo-form">
+          <input type="email" placeholder="seuemail@exemplo.com" required>
+          <button class="btn btn-dark" type="submit">Quero meu desconto</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="wrap section-tight">
+      <div class="section-head">
+        <p class="eyebrow">Depoimentos</p>
+        <h2>O que dizem nossos clientes</h2>
+      </div>
+      <div class="testi-grid" id="testimonial-grid"></div>
+    </div>
+
+  </section>
+
+  <!-- ======================= BROWSE ======================= -->
+  <section id="view-browse" class="view">
+    <div class="wrap browse-head">
+      <h2 style="margin:0 0 6px;font-size:26px">Encontre o profissional certo</h2>
+      <p style="color:var(--text-dim);margin:0;font-size:14px">Filtre por categoria, compare avaliações e converse antes de contratar.</p>
+      <div class="filter-row" id="filter-chips"></div>
+    </div>
+    <div class="wrap section-tight" style="padding-top:0">
+      <div class="browse-toolbar">
+        <span id="browse-count" style="color:var(--text-dim);font-size:13.5px"></span>
+        <select id="sort-select">
+          <option value="rating">Melhor avaliação</option>
+          <option value="price">Menor preço</option>
+          <option value="reviews">Mais avaliações</option>
+        </select>
+      </div>
+      <div class="pro-grid" id="browse-grid"></div>
+      <div class="empty-state hidden" id="browse-empty">
+        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <p>Nenhum profissional encontrado para esse filtro.<br>Tente outra categoria ou termo de busca.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= AUTH ======================= -->
+  <section id="view-auth" class="view">
+    <div class="auth-shell">
+      <div class="auth-card">
+        <div class="auth-head">
+          <h3 id="auth-title">Entrar</h3>
+          <div class="role-toggle" id="role-toggle-wrap">
+            <button data-role="cliente" class="active">Cliente</button>
+            <button data-role="afiliado">Afiliado</button>
+          </div>
+        </div>
+
+        <div class="tab-switch">
+          <button data-mode="login" class="active">Entrar</button>
+          <button data-mode="cadastro">Cadastro</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="login-form">
+          <div class="field">
+            <label>E-mail</label>
+            <input type="email" id="login-email" placeholder="Digite seu email..." required>
+            <div class="field-err">Informe um e-mail válido.</div>
+          </div>
+          <div class="field">
+            <label>Senha</label>
+            <input type="password" id="login-password" placeholder="Digite sua senha..." required minlength="4">
+            <div class="field-err">A senha deve ter ao menos 4 caracteres.</div>
+          </div>
+          <span class="small-link" id="forgot-link">Esqueceu sua senha?</span>
+          <label class="check-row"><input type="checkbox" id="login-terms" checked> Ao continuar você concorda com as Condições de Uso e a Política de Privacidade.</label>
+          <button type="submit" class="btn btn-dark btn-block">Entrar</button>
+        </form>
+
+        <!-- CADASTRO FORM -->
+        <form id="cadastro-form" class="hidden">
+          <div class="field">
+            <label>Nome Completo <span class="req">*</span></label>
+            <input type="text" id="cad-nome" placeholder="Digite seu nome..." required>
+          </div>
+          <div class="field">
+            <label>E-mail <span class="req">*</span></label>
+            <input type="email" id="cad-email" placeholder="seuemail@gmail.com" required>
+            <div class="field-err">Informe um e-mail válido.</div>
+          </div>
+          <div class="field">
+            <label>CPF <span class="req">*</span></label>
+            <input type="text" id="cad-cpf" placeholder="Digite seu CPF..." maxlength="14" required>
+            <div class="field-err">CPF deve ter 11 dígitos.</div>
+          </div>
+          <div class="field">
+            <label>Telefone (Opcional)</label>
+            <div class="field-row">
+              <input type="text" id="cad-ddd" placeholder="DDD" style="max-width:70px" maxlength="2">
+              <input type="text" id="cad-tel" placeholder="Telefone" maxlength="10">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field" style="flex:1">
+              <label>Senha <span class="req">*</span></label>
+              <input type="password" id="cad-senha" placeholder="Senha..." required minlength="4">
+            </div>
+            <div class="field" style="flex:1">
+              <label>Confirmar <span class="req">*</span></label>
+              <input type="password" id="cad-confirmar" placeholder="Confirmar..." required minlength="4">
+              <div class="field-err">As senhas não coincidem.</div>
+            </div>
+          </div>
+          <label class="check-row"><input type="checkbox" id="cad-terms" required> Ao continuar você concorda com as Condições de Uso e a Política de Privacidade. Você verificará a autenticidade dos seus dados.</label>
+          <button type="submit" class="btn btn-primary btn-block">Cadastre-se</button>
+        </form>
+
+        <p class="auth-foot-link">Dificuldades de acesso? <span class="auth-link" data-action="support">Suporte técnico</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= CHAT ======================= -->
+  <section id="view-chat" class="view">
+    <div class="chat-shell" id="chat-shell">
+      <aside class="chat-list">
+        <div class="chat-list-search">
+          <div class="searchbar">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="chat-search" placeholder="Buscar profissional...">
+          </div>
+        </div>
+        <div class="chat-list-items" id="chat-list-items"></div>
+      </aside>
+      <div class="chat-main" id="chat-main">
+        <div class="chat-body chat-empty" id="chat-empty-state">Selecione uma conversa para começar, ou encontre um profissional para contratar.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <div class="brand">
+        <span class="brand-mark">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+        </span>
+        PD<span class="hi">Works</span>
+      </div>
+      <p>A plataforma que conecta você aos melhores profissionais de manutenção residencial. Contratação rápida, segura e com garantia.</p>
+      <div class="social">
+        <a href="#" aria-label="Instagram"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 9h3V6h-3a4 4 0 0 0-4 4v2H7v3h3v6h3v-6h3l1-3h-4v-2a1 1 0 0 1 1-1Z"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 13v4"/></svg></a>
+      </div>
+    </div>
+    <div class="foot-col">
+      <h5>Categorias</h5>
+      <a data-nav="browse" data-cat="eletricista">Eletricista</a>
+      <a data-nav="browse" data-cat="encanador">Encanador</a>
+      <a data-nav="browse" data-cat="pintura">Pintor residencial</a>
+      <a data-nav="browse" data-cat="chaveiro">Chaveiro rápido</a>
+    </div>
+    <div class="foot-col">
+      <h5>Institucional</h5>
+      <a data-action="support">Sobre nós</a>
+      <a data-nav="auth" data-role="afiliado">Seja um parceiro</a>
+      <a data-action="support">Carreiras</a>
+      <a data-action="support">Garantia PDWorks</a>
+    </div>
+    <div class="foot-col">
+      <h5>Suporte</h5>
+      <a data-action="support">Central de Ajuda</a>
+      <a data-action="support">Contato e Ouvidoria</a>
+      <a data-action="support">Termos de Serviço</a>
+      <a data-action="support">Política de Privacidade</a>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© 2026 PDWorks Tecnologia Ltda. Conectando você aos melhores profissionais.</span>
+    <span><a data-action="support">Política de Privacidade</a> &nbsp;·&nbsp; <a data-action="support">Termos de Uso</a></span>
+  </div>
+</footer>
+
+<!-- FEEDBACK MODAL -->
+<div class="modal-backdrop hidden" id="feedback-modal">
+  <div class="modal-card">
+    <button class="modal-close" id="feedback-close" aria-label="Fechar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <span class="avatar lg" id="feedback-avatar">?</span>
+    <h3 id="feedback-name">Profissional</h3>
+    <p class="sub">Avaliação pendente</p>
+    <p class="q">Como foi o atendimento?</p>
+    <div class="star-row" id="feedback-stars">
+      <button data-v="1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg></button>
+      <button data-v="2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg></button>
+      <button data-v="3"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg></button>
+      <button data-v="4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg></button>
+      <button data-v="5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg></button>
+    </div>
+    <textarea id="feedback-comment" placeholder="Conte como foi sua experiência... (opcional)"></textarea>
+    <button class="btn btn-primary btn-block" id="feedback-submit">Enviar Avaliação →</button>
+    <span class="skip-link" id="feedback-skip">Pular</span>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+/* =========================================================
+   ICONS
+========================================================= */
+const ICONS = {
+  bolt:'<path d="M13 2 3 14h7l-1 8 11-14h-7l1-6Z"/>',
+  drop:'<path d="M12 3s7 7.4 7 12a7 7 0 0 1-14 0c0-4.6 7-12 7-12Z"/>',
+  wave:'<path d="M2 8c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/>',
+  roller:'<rect x="3" y="4" width="12" height="6" rx="1"/><path d="M9 10v4a2 2 0 0 0 2 2h1"/><rect x="11" y="16" width="4" height="6" rx="1"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M14 9l2 2"/>',
+  hammer:'<path d="m15 12-8.5 8.5a2 2 0 1 1-3-3L12 9"/><path d="M17.6 4.4c1.6-1.6 4-1.6 5 0L14 13l-2.5-2.5Z"/>',
+  broom:'<path d="M20 4 9 15"/><path d="m9 15-5 1 1-5"/><path d="M13 11 3 21"/><path d="M13 11c2-3 6-6 9-7"/>',
+  house:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/>',
+  star:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/>',
+  send:'<path d="m3 11 18-8-8 18-2-8-8-2Z"/>',
+  paperclip:'<path d="M21 12.5 12.6 21a5 5 0 0 1-7.1-7L14 5.5a3.5 3.5 0 0 1 5 5L10.4 19a2 2 0 0 1-2.9-2.8L15.5 8"/>',
+  smile:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5s1.5 2 3.5 2 3.5-2 3.5-2"/><path d="M9 9h.01M15 9h.01"/>',
+  mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/>',
+};
+function ico(name, size=20, extra=''){
+  return `<svg class="icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" ${extra}>${ICONS[name]||''}</svg>`;
+}
+function starIcon(filled){
+  return `<svg viewBox="0 0 24 24" width="13" height="13" fill="${filled?'currentColor':'none'}" stroke="currentColor" stroke-width="1.6"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg>`;
+}
+function ratingStars(rating){
+  let out='';
+  for(let i=1;i<=5;i++){ out += starIcon(i<=Math.round(rating)); }
+  return out;
+}
+const AVATAR_COLORS=['#f0701c','#4f8ef7','#33c481','#c1497a','#8a6ef0','#f2b90c','#3fb6c9','#e2593a'];
+function avatarColor(name){ let h=0; for(const c of name) h=c.charCodeAt(0)+((h<<5)-h); return AVATAR_COLORS[Math.abs(h)%AVATAR_COLORS.length]; }
+function initials(name){ return name.split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+function avatarHTML(name, size='md'){
+  return `<span class="avatar ${size==='lg'?'lg':''}" style="background:${avatarColor(name)}">${initials(name)}</span>`;
+}
+
+/* =========================================================
+   DATA
+========================================================= */
+const CATEGORIES = [
+  {id:'eletricista', name:'Eletricista', icon:'bolt', count:148},
+  {id:'encanador', name:'Encanador', icon:'drop', count:98},
+  {id:'piscineiro', name:'Piscineiro', icon:'wave', count:31},
+  {id:'pintura', name:'Pintura & Acabamento', icon:'roller', count:120},
+  {id:'chaveiro', name:'Chaveiro & Segurança', icon:'key', count:64},
+  {id:'marceneiro', name:'Marceneiro', icon:'hammer', count:83},
+  {id:'limpeza', name:'Limpeza & Diarista', icon:'broom', count:215},
+  {id:'reformas', name:'Reformas em Geral', icon:'house', count:66},
+];
+
+const PROFESSIONALS = [
+  {id:1, name:'Pedro Arcolino', category:'eletricista', specialty:'Eletricista Residencial', rating:4.9, reviews:494, price:45, tag:'Disponível agora', online:true, desc:'Especialista em reparos rápidos, instalações elétricas e manutenção preventiva com garantia.'},
+  {id:2, name:'Maria Silva Franco', category:'encanador', specialty:'Encanadora', rating:5.0, reviews:1040, price:80, tag:'Serviço verificado', online:true, desc:'Especialista em reparos hidráulicos, instalações e reformas complexas com garantia.'},
+  {id:3, name:'Vilhor Biz', category:'piscineiro', specialty:'Piscineiro', rating:4.7, reviews:168, price:50, tag:'', online:false, desc:'Manutenção de piscinas, tratamento de água e reparo de equipamentos com garantia.'},
+  {id:4, name:'Arthur Nunes', category:'pintura', specialty:'Pintor & Acabamento', rating:4.6, reviews:192, price:60, tag:'', online:true, desc:'Especialista em pintura residencial, texturas e acabamento fino com garantia.'},
+  {id:5, name:'Carlos Eletricista', category:'eletricista', specialty:'Eletricista', rating:4.8, reviews:210, price:55, tag:'Online', online:true, desc:'Troca de disjuntores, revisão de fiação e instalações residenciais.'},
+  {id:6, name:'Roberta Encanadora', category:'encanador', specialty:'Encanadora', rating:4.9, reviews:340, price:70, tag:'', online:true, desc:'Vazamentos, desentupimentos e instalação de torneiras e registros.'},
+  {id:7, name:'André Pintor', category:'pintura', specialty:'Pintor', rating:4.5, reviews:88, price:48, tag:'', online:true, desc:'Pintura residencial interna e externa, com orçamento sem compromisso.'},
+  {id:8, name:'Serena Estilista', category:'reformas', specialty:'Design de Interiores', rating:4.7, reviews:75, price:90, tag:'', online:false, desc:'Reforma, organização e styling de ambientes residenciais.'},
+  {id:9, name:'Felipe Marceneiro', category:'marceneiro', specialty:'Marceneiro', rating:4.8, reviews:150, price:65, tag:'', online:true, desc:'Móveis planejados, reparos e restauração de peças em madeira.'},
+  {id:10, name:'Maria Jardineira', category:'reformas', specialty:'Jardinagem', rating:4.9, reviews:120, price:40, tag:'', online:true, desc:'Poda, limpeza de jardim e projetos simples de paisagismo.'},
+  {id:11, name:'Pedro Vidraceiro', category:'reformas', specialty:'Vidraceiro', rating:4.6, reviews:60, price:55, tag:'', online:false, desc:'Troca e instalação de vidros, box e espelhos sob medida.'},
+  {id:12, name:'Juliana Diarista', category:'limpeza', specialty:'Limpeza & Diarista', rating:4.9, reviews:410, price:35, tag:'Disponível agora', online:true, desc:'Limpeza residencial completa, organização e faxina pós-obra.'},
+];
+
+const TESTIMONIALS = [
+  {name:'Fernanda Lima', role:'Cliente há 8 meses', rating:5, text:'Chamei um eletricista pelo app numa emergência e em menos de uma hora já estava tudo resolvido. Muito prático.'},
+  {name:'Ricardo Alves', role:'Cliente há 1 ano', rating:5, text:'O chat direto com o profissional facilita muito combinar horário e valor antes de fechar o serviço.'},
+  {name:'Camila Torres', role:'Cliente há 3 meses', rating:4, text:'Gostei da garantia do serviço. Me senti segura contratando alguém que nunca tinha usado antes.'},
+];
+
+const CHAT_SCRIPTS = {
+  'Carlos Eletricista': [
+    {from:'me', text:'Oi Carlos! Preciso de um eletricista para trocar disjuntores na minha casa. Você poderia hoje?', time:'15:18'},
+    {from:'them', text:'Claro! Posso passar hoje entre 15h e 17h. Você tem foto do disjuntor atual?', time:'14:22'},
+    {from:'me', text:'Claro! Você poderia trazer os materiais?', time:'15:18'},
+    {from:'them', text:'Sim, posso mandar agora. O preço fica em torno de R$ 180,00 (mão de obra + materiais)', time:'15:18'},
+    {from:'me', text:'O código já está liberado? Todo cadastrado', time:'14:49'},
+  ],
+};
+const CANNED_REPLIES = [
+  'Perfeito, recebi sua mensagem! Posso atender ainda hoje, te aviso o horário em instantes.',
+  'Consigo sim, me passa o endereço e o melhor horário para você.',
+  'Combinado! Qualquer detalhe extra pode me chamar por aqui mesmo.',
+  'Show, vou revisar a agenda e já te confirmo o horário.',
+];
+
+/* =========================================================
+   STATE
+========================================================= */
+const state = {
+  user: null, // {name, email, role}
+  registeredUsers: {}, // email -> {name, password, role}
+  conversations: {}, // proId -> {messages:[{from,text,time}], unread}
+  activeChatProId: null,
+  browseCategory: 'all',
+  browseSearch: '',
+  authMode: 'login',
+  authRole: 'cliente',
+  pendingFeedbackProId: null,
+};
+
+/* =========================================================
+   TOAST
+========================================================= */
+function toast(msg, type=''){
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type==='err'?' err':'');
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 3200);
+}
+
+/* =========================================================
+   NAV / ROUTER
+========================================================= */
+function navigate(view, opts={}){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  window.scrollTo({top:0, behavior:'instant' in document.documentElement.style ? 'instant':'auto'});
+
+  if(view==='auth'){
+    if(opts.mode) setAuthMode(opts.mode);
+    if(opts.role) setAuthRole(opts.role);
+  }
+  if(view==='browse'){
+    if(opts.cat){ state.browseCategory = opts.cat; }
+    renderBrowseChips();
+    renderBrowseGrid();
+  }
+  if(view==='chat'){
+    if(opts.proId){ openConversation(opts.proId); }
+  }
+  if(opts.scrollTo){
+    setTimeout(()=>{ const el=document.getElementById(opts.scrollTo); if(el) el.scrollIntoView({behavior:'smooth'}); }, 30);
+  }
+}
+
+document.addEventListener('click', (e)=>{
+  const navEl = e.target.closest('[data-nav]');
+  if(navEl){
+    e.preventDefault();
+    const view = navEl.dataset.nav;
+    if(view==='chat' && !state.user){ toast('Entre na sua conta para acessar o chat.','err'); navigate('auth',{mode:'login'}); return; }
+    if(view==='browse' && navEl.dataset.cat){ navigate('browse', {cat: navEl.dataset.cat}); return; }
+    navigate(view, {mode:navEl.dataset.mode, role:navEl.dataset.role, scrollTo:navEl.dataset.scroll});
+  }
+  const actionEl = e.target.closest('[data-action]');
+  if(actionEl && actionEl.dataset.action==='support'){
+    e.preventDefault();
+    toast('Nosso time de suporte responde em até 24h. Em breve essa central estará disponível!');
+  }
+});
+
+/* =========================================================
+   HEADER SEARCH
+========================================================= */
+document.getElementById('header-search').addEventListener('keydown', (e)=>{
+  if(e.key==='Enter'){
+    state.browseSearch = e.target.value.trim();
+    state.browseCategory = 'all';
+    navigate('browse');
+  }
+});
+
+/* =========================================================
+   RENDER: CATEGORIES
+========================================================= */
+function renderCategories(){
+  const grid = document.getElementById('category-grid');
+  grid.innerHTML = CATEGORIES.map(c=>`
+    <div class="cat-card" data-nav="browse" data-cat="${c.id}">
+      <div class="cat-ico">${ico(c.icon,20)}</div>
+      <h4>${c.name}</h4>
+      <span>${c.count} profissionais ativos</span>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   RENDER: PRO CARD
+========================================================= */
+function proCard(p){
+  return `
+  <div class="pro-card">
+    <div class="pro-top">
+      ${avatarHTML(p.name)}
+      <div class="meta">
+        <b>${p.name}</b>
+        <span>${p.specialty}</span>
+      </div>
+    </div>
+    <div class="rating-row">${ratingStars(p.rating)}<span>${p.rating.toFixed(1)} (${p.reviews} avaliações)</span></div>
+    <p class="pro-desc">${p.desc}</p>
+    ${p.tag ? `<span class="tag">${ico('bolt',11)} ${p.tag}</span>` : ''}
+    <div class="pro-foot">
+      <span class="pro-price">R$ ${p.price},00 <span>/ visita</span></span>
+      <button class="btn btn-primary btn-sm" data-hire="${p.id}">Contratar</button>
+    </div>
+  </div>`;
+}
+
+function renderFeatured(){
+  const top = [...PROFESSIONALS].sort((a,b)=>b.rating-a.rating || b.reviews-a.reviews).slice(0,4);
+  document.getElementById('featured-grid').innerHTML = top.map(proCard).join('');
+}
+
+function renderTestimonials(){
+  document.getElementById('testimonial-grid').innerHTML = TESTIMONIALS.map(t=>`
+    <div class="testi">
+      <div class="rating-row">${ratingStars(t.rating)}</div>
+      <p>“${t.text}”</p>
+      <div class="testi-who">
+        ${avatarHTML(t.name)}
+        <span><b>${t.name}</b><span>${t.role}</span></span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   RENDER: BROWSE
+========================================================= */
+function renderBrowseChips(){
+  const chips = [{id:'all', name:'Todos'}, ...CATEGORIES];
+  document.getElementById('filter-chips').innerHTML = chips.map(c=>`
+    <button class="chip ${state.browseCategory===c.id?'active':''}" data-chip="${c.id}">${c.name}</button>
+  `).join('');
+  document.querySelectorAll('[data-chip]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ state.browseCategory = btn.dataset.chip; renderBrowseChips(); renderBrowseGrid(); });
+  });
+}
+
+function renderBrowseGrid(){
+  let list = PROFESSIONALS.filter(p=>{
+    const catOk = state.browseCategory==='all' || p.category===state.browseCategory;
+    const q = state.browseSearch.toLowerCase();
+    const searchOk = !q || p.name.toLowerCase().includes(q) || p.specialty.toLowerCase().includes(q);
+    return catOk && searchOk;
+  });
+  const sort = document.getElementById('sort-select').value;
+  if(sort==='rating') list.sort((a,b)=>b.rating-a.rating);
+  if(sort==='price') list.sort((a,b)=>a.price-b.price);
+  if(sort==='reviews') list.sort((a,b)=>b.reviews-a.reviews);
+
+  document.getElementById('browse-count').textContent = `${list.length} profissional${list.length===1?'':'is'} encontrado${list.length===1?'':'s'}${state.browseSearch?` para “${state.browseSearch}”`:''}`;
+  document.getElementById('browse-grid').innerHTML = list.map(proCard).join('');
+  document.getElementById('browse-empty').classList.toggle('hidden', list.length>0);
+}
+document.getElementById('sort-select').addEventListener('change', renderBrowseGrid);
+
+/* Hire button (event delegation) */
+document.addEventListener('click', (e)=>{
+  const hireBtn = e.target.closest('[data-hire]');
+  if(hireBtn){
+    const proId = Number(hireBtn.dataset.hire);
+    if(!state.user){
+      toast('Crie uma conta ou entre para contratar um profissional.','err');
+      navigate('auth', {mode:'login'});
+      return;
+    }
+    navigate('chat', {proId});
+  }
+});
+
+/* =========================================================
+   AUTH
+========================================================= */
+function setAuthMode(mode){
+  state.authMode = mode;
+  document.querySelectorAll('.tab-switch button').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  document.getElementById('login-form').classList.toggle('hidden', mode!=='login');
+  document.getElementById('cadastro-form').classList.toggle('hidden', mode!=='cadastro');
+  document.getElementById('role-toggle-wrap').style.display = mode==='cadastro' ? 'flex' : 'none';
+  document.getElementById('auth-title').textContent = mode==='login' ? 'Entrar' : 'Cadastro';
+}
+function setAuthRole(role){
+  state.authRole = role;
+  document.querySelectorAll('#role-toggle-wrap button').forEach(b=>b.classList.toggle('active', b.dataset.role===role));
+}
+document.querySelectorAll('.tab-switch button').forEach(b=> b.addEventListener('click', ()=>setAuthMode(b.dataset.mode)));
+document.querySelectorAll('#role-toggle-wrap button').forEach(b=> b.addEventListener('click', ()=>setAuthRole(b.dataset.role)));
+document.getElementById('forgot-link').addEventListener('click', ()=> toast('Enviamos instruções de recuperação para o seu e-mail (simulado).'));
+
+function emailValid(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+document.getElementById('login-form').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const emailInput = document.getElementById('login-email');
+  const passInput = document.getElementById('login-password');
+  let ok = true;
+  toggleFieldError(emailInput, !emailValid(emailInput.value));
+  toggleFieldError(passInput, passInput.value.length<4);
+  if(!emailValid(emailInput.value) || passInput.value.length<4) ok=false;
+  if(!ok) return;
+
+  const email = emailInput.value.trim().toLowerCase();
+  const existing = state.registeredUsers[email];
+  const name = existing ? existing.name : email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+  const role = existing ? existing.role : 'cliente';
+  loginUser({name, email, role});
+  toast(`Bem-vindo(a) de volta, ${name.split(' ')[0]}!`);
+  navigate('home');
+});
+
+document.getElementById('cadastro-form').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const nome = document.getElementById('cad-nome');
+  const email = document.getElementById('cad-email');
+  const cpf = document.getElementById('cad-cpf');
+  const senha = document.getElementById('cad-senha');
+  const confirmar = document.getElementById('cad-confirmar');
+  const terms = document.getElementById('cad-terms');
+
+  let valid = true;
+  if(!nome.value.trim()){ toggleFieldError(nome,true); valid=false; } else toggleFieldError(nome,false);
+  if(!emailValid(email.value)){ toggleFieldError(email,true); valid=false; } else toggleFieldError(email,false);
+  const cpfDigits = cpf.value.replace(/\D/g,'');
+  if(cpfDigits.length!==11){ toggleFieldError(cpf,true); valid=false; } else toggleFieldError(cpf,false);
+  if(senha.value.length<4 || senha.value!==confirmar.value){ toggleFieldError(confirmar,true); valid=false; } else toggleFieldError(confirmar,false);
+  if(!terms.checked){ toast('Você precisa aceitar os termos para continuar.','err'); valid=false; }
+  if(!valid) return;
+
+  const emailLC = email.value.trim().toLowerCase();
+  state.registeredUsers[emailLC] = {name:nome.value.trim(), password:senha.value, role:state.authRole};
+  loginUser({name:nome.value.trim(), email:emailLC, role:state.authRole});
+  toast(`Conta criada com sucesso! Bem-vindo(a), ${nome.value.trim().split(' ')[0]}.`);
+  navigate('home');
+});
+
+cad_cpf_mask();
+function cad_cpf_mask(){
+  const cpf = document.getElementById('cad-cpf');
+  cpf.addEventListener('input', ()=>{
+    let v = cpf.value.replace(/\D/g,'').slice(0,11);
+    v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+    cpf.value = v;
+  });
+}
+
+function toggleFieldError(input, isErr){
+  const field = input.closest('.field');
+  if(field) field.classList.toggle('err', isErr);
+}
+
+function loginUser(user){
+  state.user = user;
+  document.getElementById('guest-actions').classList.add('hidden');
+  document.getElementById('user-menu').classList.remove('hidden');
+  document.getElementById('user-name').textContent = user.name.split(' ')[0];
+  document.getElementById('user-role').textContent = user.role==='afiliado' ? 'Profissional' : 'Cliente';
+  const av = document.getElementById('user-avatar');
+  av.textContent = initials(user.name);
+  av.style.background = avatarColor(user.name);
+}
+document.getElementById('user-chip-btn').addEventListener('click', ()=>{
+  document.getElementById('user-dropdown').classList.toggle('open');
+});
+document.addEventListener('click', (e)=>{
+  if(!e.target.closest('.user-menu')) document.getElementById('user-dropdown').classList.remove('open');
+});
+document.getElementById('logout-btn').addEventListener('click', ()=>{
+  state.user = null;
+  document.getElementById('guest-actions').classList.remove('hidden');
+  document.getElementById('user-menu').classList.add('hidden');
+  toast('Você saiu da sua conta.');
+  navigate('home');
+});
+
+/* =========================================================
+   CHAT
+========================================================= */
+function getConversation(proId){
+  if(!state.conversations[proId]){
+    const p = PROFESSIONALS.find(x=>x.id===proId);
+    const scripted = CHAT_SCRIPTS[p.name];
+    state.conversations[proId] = {
+      messages: scripted ? scripted.map(m=>({from:m.from, text:m.text, time:m.time})) : [],
+      lastActivity: scripted ? 'Hoje' : null,
+    };
+  }
+  return state.conversations[proId];
+}
+
+function renderChatList(){
+  const q = (document.getElementById('chat-search').value||'').toLowerCase();
+  const list = PROFESSIONALS.filter(p=> p.name.toLowerCase().includes(q) || p.specialty.toLowerCase().includes(q));
+  document.getElementById('chat-list-items').innerHTML = list.map(p=>{
+    const conv = state.conversations[p.id];
+    const last = conv && conv.messages.length ? conv.messages[conv.messages.length-1] : null;
+    const preview = last ? (last.from==='me' ? 'Você: ' : '') + last.text : 'Nenhuma mensagem ainda.';
+    return `
+    <div class="chat-item ${state.activeChatProId===p.id?'active':''}" data-open-chat="${p.id}">
+      <span class="avatar">${initials(p.name)}<span class="status-dot ${p.online?'online':'pending'}"></span></span>
+      <div class="ci-meta">
+        <div class="ci-top"><b>${p.name}</b><time>${last?last.time:''}</time></div>
+        <p>${preview}</p>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('[data-open-chat]').forEach(el=>{
+    el.style.background = ''; // reset any inline
+  });
+  document.querySelectorAll('[data-open-chat]').forEach(el=>{
+    el.addEventListener('click', ()=> openConversation(Number(el.dataset.openChat)));
+  });
+  // avatar bg color for chat list
+  document.querySelectorAll('.chat-item .avatar').forEach((av, i)=>{
+    av.style.background = avatarColor(list[i].name);
+  });
+}
+document.getElementById('chat-search').addEventListener('input', renderChatList);
+
+function openConversation(proId){
+  state.activeChatProId = proId;
+  const p = PROFESSIONALS.find(x=>x.id===proId);
+  const conv = getConversation(proId);
+  renderChatList();
+
+  document.getElementById('chat-shell').classList.add('show-thread');
+  document.getElementById('chat-main').innerHTML = `
+    <div class="chat-head">
+      <button class="back-btn" id="chat-back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      ${avatarHTML(p.name)}
+      <div class="who"><b>${p.name}</b><span>${p.online?'online':'visto por último há pouco'}</span></div>
+      <div class="chat-head-actions">
+        <button class="btn btn-outline btn-sm" id="finish-btn">Finalizar e avaliar</button>
+      </div>
+    </div>
+    <div class="chat-body" id="chat-body"></div>
+    <div class="chat-input">
+      <button class="icon-btn" title="Emoji" id="emoji-btn">${ico('smile',20)}</button>
+      <button class="icon-btn" title="Anexar" id="attach-btn">${ico('paperclip',20)}</button>
+      <input type="text" id="chat-text-input" placeholder="Escreva uma mensagem...">
+      <button class="icon-btn" title="Áudio" id="mic-btn">${ico('mic',20)}</button>
+      <button class="send-btn" id="chat-send-btn">${ico('send',16)}</button>
+    </div>
+  `;
+  renderChatBody(proId);
+  document.getElementById('chat-back').addEventListener('click', ()=> document.getElementById('chat-shell').classList.remove('show-thread'));
+  document.getElementById('finish-btn').addEventListener('click', ()=> openFeedbackModal(proId));
+  document.getElementById('emoji-btn').addEventListener('click', ()=>{
+    const inp = document.getElementById('chat-text-input'); inp.value += '🙂'; inp.focus();
+  });
+  document.getElementById('attach-btn').addEventListener('click', ()=> toast('Anexar arquivos estará disponível em breve.'));
+  document.getElementById('mic-btn').addEventListener('click', ()=> toast('Gravação de áudio estará disponível em breve.'));
+
+  const sendFn = ()=> sendMessage(proId);
+  document.getElementById('chat-send-btn').addEventListener('click', sendFn);
+  document.getElementById('chat-text-input').addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendFn(); });
+}
+
+function renderChatBody(proId){
+  const conv = getConversation(proId);
+  const body = document.getElementById('chat-body');
+  if(!body) return;
+  if(conv.messages.length===0){
+    body.innerHTML = `<div class="chat-empty" style="margin:auto">Nenhuma mensagem ainda. Diga olá e combine os detalhes do serviço!</div>`;
+    return;
+  }
+  body.innerHTML = `<div class="day-sep">Hoje</div>` + conv.messages.map(m=>`
+    <div class="bubble ${m.from==='me'?'out':'in'}">${m.text}<time>${m.time}</time></div>
+  `).join('');
+  body.scrollTop = body.scrollHeight;
+}
+
+function sendMessage(proId){
+  const input = document.getElementById('chat-text-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const conv = getConversation(proId);
+  const time = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  conv.messages.push({from:'me', text, time});
+  input.value='';
+  renderChatBody(proId);
+  renderChatList();
+
+  const p = PROFESSIONALS.find(x=>x.id===proId);
+  setTimeout(()=>{
+    const reply = CANNED_REPLIES[Math.floor(Math.random()*CANNED_REPLIES.length)];
+    conv.messages.push({from:'them', text:reply, time:new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})});
+    if(state.activeChatProId===proId) renderChatBody(proId);
+    renderChatList();
+  }, 1100);
+}
+
+/* =========================================================
+   FEEDBACK MODAL
+========================================================= */
+let feedbackRating = 0;
+function openFeedbackModal(proId){
+  state.pendingFeedbackProId = proId;
+  feedbackRating = 0;
+  const p = PROFESSIONALS.find(x=>x.id===proId);
+  document.getElementById('feedback-avatar').textContent = initials(p.name);
+  document.getElementById('feedback-avatar').style.background = avatarColor(p.name);
+  document.getElementById('feedback-name').textContent = p.name;
+  document.getElementById('feedback-comment').value = '';
+  updateStars(0);
+  document.getElementById('feedback-modal').classList.remove('hidden');
+}
+function updateStars(v){
+  document.querySelectorAll('#feedback-stars button').forEach(b=>{
+    b.classList.toggle('on', Number(b.dataset.v) <= v);
+  });
+}
+document.querySelectorAll('#feedback-stars button').forEach(b=>{
+  b.addEventListener('click', ()=>{ feedbackRating = Number(b.dataset.v); updateStars(feedbackRating); });
+});
+function closeFeedback(){ document.getElementById('feedback-modal').classList.add('hidden'); }
+document.getElementById('feedback-close').addEventListener('click', closeFeedback);
+document.getElementById('feedback-skip').addEventListener('click', ()=>{ closeFeedback(); toast('Você pode avaliar depois pelo histórico de chats.'); });
+document.getElementById('feedback-modal').addEventListener('click', (e)=>{ if(e.target.id==='feedback-modal') closeFeedback(); });
+document.getElementById('feedback-submit').addEventListener('click', ()=>{
+  if(feedbackRating===0){ toast('Selecione ao menos uma estrela.','err'); return; }
+  closeFeedback();
+  toast('Obrigado pela sua avaliação! Isso ajuda toda a comunidade.');
+});
+
+/* =========================================================
+   PROMO FORM
+========================================================= */
+document.getElementById('promo-form').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  toast('Cupom de 15% enviado para o seu e-mail!');
+  e.target.reset();
+});
+
+/* =========================================================
+   INIT
+========================================================= */
+renderCategories();
+renderFeatured();
+renderTestimonials();
+renderBrowseChips();
+renderBrowseGrid();
+setAuthMode('login');
+setAuthRole('cliente');
+</script>
+</body>
+</html>
