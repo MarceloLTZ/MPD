@@ -98,6 +98,27 @@ textarea {
     gap: 18px;
 }
 
+.usuario-logado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.foto-perfil {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f0701c;
+}
+
+.bem-vindo {
+    color: #f0701c;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
 .menu a {
     font-size: 14px;
     color: #c6c6cc;
