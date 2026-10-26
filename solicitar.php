@@ -63,6 +63,8 @@ include 'includes/cabecalho.php';
 
             <label for="endereco">Endereço</label>
             <input type="text" id="endereco" name="endereco" required>
+            <button type="button" class="botao-link" id="usar-endereco-atual">📍 Usar minha localização atual</button>
+            <small id="endereco-aviso" class="texto-cinza"></small>
 
             <label for="data_desejada">Data desejada</label>
             <input type="date" id="data_desejada" name="data_desejada">

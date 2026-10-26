@@ -20,6 +20,9 @@ $stmt->execute();
 $avaliacoes = $stmt->get_result();
 
 $titulo = $profissional['nome'] . ' - MPD Nexus';
+$extraHead = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">';
+$extraScript = '<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="js/mapa.js"></script>';
 include 'includes/inicio_html.php';
 include 'includes/cabecalho.php';
 ?>
@@ -27,7 +30,7 @@ include 'includes/cabecalho.php';
 <main class="secao">
     <div class="container perfil-profissional">
         <div class="perfil-principal">
-            <div class="avatar grande"><?php echo strtoupper(substr($profissional['nome'], 0, 1)); ?></div>
+            <img class="foto-perfil" src="<?php echo textoSeguro(fotoProfissional($profissional)); ?>" alt="<?php echo textoSeguro($profissional['nome']); ?>" data-fallback="<?php echo textoSeguro(avatarGerado($profissional['nome'])); ?>" onerror="this.onerror=null;this.src=this.dataset.fallback">
             <div>
                 <p class="destaque"><?php echo textoSeguro($profissional['especialidade']); ?></p>
                 <h1><?php echo textoSeguro($profissional['nome']); ?></h1>
@@ -49,6 +52,18 @@ include 'includes/cabecalho.php';
                         <a class="botao escuro" href="chat.php?id=<?php echo $id; ?>">Abrir chat</a>
                     <?php endif; ?>
                 </div>
+            </div>
+
+            <div class="painel">
+                <h2>Onde atende</h2>
+                <div id="mapa" class="mapa-real pequeno" data-unico="1"></div>
+                <div class="localizacao-item" style="display:none"
+                     data-id="<?php echo $profissional['id']; ?>"
+                     data-nome="<?php echo textoSeguro($profissional['nome']); ?>"
+                     data-info="<?php echo textoSeguro($profissional['especialidade'] . ' · ' . $profissional['cidade']); ?>"
+                     data-lat="<?php echo $profissional['latitude']; ?>"
+                     data-lon="<?php echo $profissional['longitude']; ?>"></div>
+                <p><a href="https://www.google.com/maps/dir/?api=1&destination=<?php echo $profissional['latitude']; ?>,<?php echo $profissional['longitude']; ?>&travelmode=driving" target="_blank" rel="noopener">Abrir rota no Google Maps →</a></p>
             </div>
 
             <div class="painel">

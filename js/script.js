@@ -8,45 +8,6 @@ if (botaoMenu && menu) {
     });
 }
 
-// Localização do usuário
-var botaoLocalizacao = document.getElementById('usar-localizacao');
-
-if (botaoLocalizacao) {
-    botaoLocalizacao.addEventListener('click', function () {
-        var texto = document.getElementById('localizacao-texto');
-
-        if (!navigator.geolocation) {
-            texto.textContent = 'Seu navegador não permite usar localização.';
-            return;
-        }
-
-        texto.textContent = 'Buscando sua localização...';
-
-        navigator.geolocation.getCurrentPosition(
-            function (posicao) {
-                var minhaLat = posicao.coords.latitude;
-                var minhaLon = posicao.coords.longitude;
-                var itens = document.querySelectorAll('.localizacao-item');
-
-                itens.forEach(function (item) {
-                    var lat = parseFloat(item.getAttribute('data-lat'));
-                    var lon = parseFloat(item.getAttribute('data-lon'));
-                    var distancia = calcularDistancia(minhaLat, minhaLon, lat, lon);
-
-                    item.setAttribute('data-distancia', distancia);
-                    item.querySelector('.distancia').textContent = distancia.toFixed(1) + ' km aproximadamente';
-                });
-
-                ordenarPorDistancia();
-                texto.textContent = 'Lista organizada pela distância aproximada.';
-            },
-            function () {
-                texto.textContent = 'Não foi possível acessar sua localização.';
-            }
-        );
-    });
-}
-
 function calcularDistancia(lat1, lon1, lat2, lon2) {
     var raioTerra = 6371;
     var diferencaLat = grausParaRadianos(lat2 - lat1);
@@ -80,5 +41,65 @@ function ordenarPorDistancia() {
 
     itens.forEach(function (item) {
         lista.appendChild(item);
+    });
+}
+
+// Confirmar senha (cadastro): avisa antes de enviar se as senhas forem diferentes
+var formCadastro = document.getElementById('form-cadastro');
+
+if (formCadastro) {
+    formCadastro.addEventListener('submit', function (evento) {
+        var senha = document.getElementById('senha').value;
+        var confirmar = document.getElementById('confirmar_senha').value;
+
+        if (senha !== confirmar) {
+            evento.preventDefault();
+            alert('As senhas não são iguais.');
+        }
+    });
+}
+
+// "Mostrar senha": troca os campos de senha entre ocultos e visíveis
+document.querySelectorAll('[data-mostrar-senha]').forEach(function (caixa) {
+    caixa.addEventListener('change', function () {
+        var formulario = caixa.closest('form');
+
+        formulario.querySelectorAll('input[name="senha"], input[name="confirmar_senha"]').forEach(function (campo) {
+            campo.type = caixa.checked ? 'text' : 'password';
+        });
+    });
+});
+
+// Solicitar serviço: preenche o endereço com a localização atual (OpenStreetMap / Nominatim)
+var botaoEndereco = document.getElementById('usar-endereco-atual');
+
+if (botaoEndereco) {
+    botaoEndereco.addEventListener('click', function () {
+        var campo = document.getElementById('endereco');
+        var aviso = document.getElementById('endereco-aviso');
+
+        if (!navigator.geolocation) {
+            aviso.textContent = 'Seu navegador não permite usar localização.';
+            return;
+        }
+
+        aviso.textContent = 'Buscando sua localização...';
+
+        navigator.geolocation.getCurrentPosition(function (posicao) {
+            var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&accept-language=pt-BR&lat=' +
+                posicao.coords.latitude + '&lon=' + posicao.coords.longitude;
+
+            fetch(url)
+                .then(function (resposta) { return resposta.json(); })
+                .then(function (dados) {
+                    campo.value = dados.display_name || '';
+                    aviso.textContent = 'Endereço preenchido. Confira e ajuste o número, se precisar.';
+                })
+                .catch(function () {
+                    aviso.textContent = 'Não foi possível descobrir o endereço. Digite manualmente.';
+                });
+        }, function () {
+            aviso.textContent = 'Não foi possível acessar sua localização. Libere a permissão no navegador.';
+        });
     });
 }

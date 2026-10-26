@@ -29,6 +29,7 @@ MPD_Nexus_TCC_PHP_SIMPLES/
 ├── pagamento.php
 ├── comprovante.php
 ├── feedback.php
+├── config.php          (dados do banco, contatos e imagens)
 ├── conexao.php
 ├── funcoes.php
 ├── includes/
@@ -43,66 +44,42 @@ MPD_Nexus_TCC_PHP_SIMPLES/
     └── banco.sql
 ```
 
-## Banco de dados
+## Banco de dados na nuvem (MySQL) - sem recriar usuários
 
-O arquivo `database/banco.sql` contém todo o banco do projeto e cria:
+As linguagens continuam as mesmas (PHP, MySQL, HTML, CSS, JS). O que muda é só **onde** o MySQL fica.
 
-- usuarios
-- profissionais
-- servicos
-- solicitacoes
-- mensagens
-- pagamentos
-- avaliacoes
+1. Crie um MySQL gratuito em um provedor (ex.: Aiven, TiDB Cloud ou Clever Cloud).
+2. No painel do provedor, copie: host, porta, usuário, senha e nome do banco.
+3. Importe `database/banco_nuvem.sql` **uma única vez** (para MySQL local/XAMPP use o `database/banco.sql`, que também cria o banco `mpd_nexus`) (pelo Adminer/phpMyAdmin do provedor ou pelo comando `mysql`).
+   O arquivo não apaga nada: pode ser importado de novo sem perder usuários.
+4. Informe os dados do banco de um destes jeitos:
+   - **Variáveis de ambiente** (recomendado, a senha não vai para o GitHub): `DB_HOST`, `DB_PORTA`, `DB_USUARIO`, `DB_SENHA`, `DB_BANCO` e `DB_SSL=1`.
+   - **Direto no `config.php`**, trocando os valores e `'ssl'` por `true` (só se o repositório for privado).
 
-Ele também insere categorias e profissionais de demonstração.
+Pronto: os usuários cadastrados ficam salvos na nuvem, em qualquer computador que rodar o site.
+Para usar o MySQL do XAMPP, deixe `host` como `localhost` e `ssl` como `false`.
 
-O banco **não é criado automaticamente no seu computador só por baixar o projeto**. Você precisa importar o arquivo SQL uma vez.
+## Imagens por link
 
-## Como rodar com XAMPP
+Nenhuma imagem fica salva no projeto.
+- Foto de capa e foto dos serviços: links no `config.php` e na coluna `imagem_url` da tabela `servicos`.
+- Foto dos profissionais: coluna `foto_url` da tabela `profissionais`.
+Se um link quebrar, o site mostra um avatar com as iniciais, sem erro.
 
-1. Instale e abra o XAMPP.
-2. Inicie `Apache` e `MySQL`.
-3. Copie a pasta do projeto para:
+## Mapa real (como nos apps de transporte)
 
-```text
-C:\xampp\htdocs\MPD_Nexus
-```
+A página **Localização** usa Leaflet + OpenStreetMap (gratuitos, sem chave de API): mapa real com os profissionais, sua posição, **Traçar rota** com distância e tempo de carro (OSRM) e botão para abrir a rota no Google Maps. Na tela **Solicitar serviço**, o botão "Usar minha localização atual" preenche o endereço. O navegador pede permissão de localização (em `localhost` ou `https` funciona).
 
-4. Abra o phpMyAdmin:
+## Conta e segurança
 
-```text
-http://localhost/phpmyadmin
-```
-
-5. Vá em **Importar** e escolha:
-
-```text
-database/banco.sql
-```
-
-6. Depois abra:
-
-```text
-http://localhost/MPD_Nexus/
-```
-
-## Conexão MySQL
-
-O arquivo `conexao.php` está configurado para o padrão do XAMPP:
-
-```php
-$servidor = "localhost";
-$usuario = "root";
-$senha = "";
-$banco = "mpd_nexus";
-```
-
-Se seu MySQL tiver senha, altere somente esse arquivo.
+- Senha guardada com `password_hash()` (nunca em texto puro) e campo de confirmar senha.
+- Confirmação de e-mail, "esqueci minha senha" e reenvio de link (links de uso único; o banco guarda só o hash do token).
+- "Manter conectado" (30 dias) e "Mostrar senha".
+- E-mail: deixe `host` vazio em `config.php` para o **modo teste** (o link aparece na tela). Para enviar de verdade, configure o SMTP (ex.: Gmail com senha de app).
 
 ## O que funciona
 
-- cadastro
+- cadastro com confirmação de senha
 - login e logout
 - senha usando `password_hash()`
 - pesquisa de profissionais

@@ -1,14 +1,25 @@
 <?php
+// Sessão que dura até 30 dias quando a pessoa marca "Manter conectado"
+ini_set('session.gc_maxlifetime', 2592000);
 session_start();
 
-$servidor = "localhost";
-$usuario = "root";
-$senha = "1234";
-$banco = "mpd_nexus";
+require_once __DIR__ . '/config.php';
 
-$conexao = new mysqli($servidor, $usuario, $senha, $banco);
+// Conecta no MySQL (local ou na nuvem, conforme o config.php)
+$conexao = mysqli_init();
 
-if ($conexao->connect_error) {
+if ($config['ssl']) {
+    // Bancos na nuvem exigem conexão segura (SSL)
+    $conexao->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, false);
+    $conexao->ssl_set(null, null, null, null, null);
+    $flags = MYSQLI_CLIENT_SSL;
+} else {
+    $flags = 0;
+}
+
+mysqli_report(MYSQLI_REPORT_OFF);
+
+if (!@$conexao->real_connect($config['host'], $config['usuario'], $config['senha'], $config['banco'], (int) $config['porta'], null, $flags)) {
     die("Erro ao conectar com o banco de dados: " . $conexao->connect_error);
 }
 

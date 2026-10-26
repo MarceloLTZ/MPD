@@ -69,7 +69,7 @@ include 'includes/cabecalho.php';
             <?php while ($profissional = $profissionais->fetch_assoc()): ?>
                 <div class="card-profissional">
                     <div class="perfil-linha">
-                        <div class="avatar"><?php echo strtoupper(substr($profissional['nome'], 0, 1)); ?></div>
+                        <img class="foto-card" src="<?php echo textoSeguro(fotoProfissional($profissional)); ?>" alt="<?php echo textoSeguro($profissional['nome']); ?>" data-fallback="<?php echo textoSeguro(avatarGerado($profissional['nome'])); ?>" onerror="this.onerror=null;this.src=this.dataset.fallback">
                         <div>
                             <h3><?php echo textoSeguro($profissional['nome']); ?></h3>
                             <p><?php echo textoSeguro($profissional['especialidade']); ?></p>

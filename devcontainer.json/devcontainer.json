@@ -1,0 +1,22 @@
+{
+  "name": "MPD Nexus (PHP)",
+  "image": "mcr.microsoft.com/devcontainers/php:1-8.3-bookworm",
+  "postCreateCommand": "sudo docker-php-ext-install mysqli",
+  "postAttachCommand": "php -S 0.0.0.0:8000 > /tmp/php.log 2>&1 &",
+  "forwardPorts": [
+    8000
+  ],
+  "portsAttributes": {
+    "8000": {
+      "label": "Site",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client"
+      ]
+    }
+  }
+}
