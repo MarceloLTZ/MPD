@@ -6,7 +6,7 @@ SET NAMES utf8mb4;
 -- Para o banco NA NUVEM use o arquivo banco_nuvem.sql (é igual, só sem as
 -- duas linhas abaixo, porque o provedor já cria o banco para você).
 -- ============================================================
-CREATE DATABASE IF NOT EXISTS mpd_nexus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS php -S 0.0.0.0:8000 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE mpd_nexus;
 
 CREATE TABLE IF NOT EXISTS usuarios (
